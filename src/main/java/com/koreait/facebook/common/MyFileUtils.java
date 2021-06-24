@@ -54,10 +54,10 @@ public class MyFileUtils {
         String fileNm = getRandomFileNm(mf); //"aslkdfjaslkf2130asdwds.jpg"
         String basePath = getSavePath(target); //이미지를 저장할 절대경로값을 만든다. "D:/springImg/profile/10"
         makeFolders(basePath); //(폴더가 없을 수 있기 때문에)폴더를 만들어준다.
-        File file = new File(basePath, fileNm);
+        File saveFile = new File(basePath, fileNm);
 
         try {
-            mf.transferTo(file);
+            mf.transferTo(saveFile);
             return fileNm;
         } catch(Exception e) {
             e.printStackTrace();

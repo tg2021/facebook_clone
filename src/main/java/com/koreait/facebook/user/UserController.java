@@ -1,6 +1,7 @@
 package com.koreait.facebook.user;
 
 import com.koreait.facebook.user.model.UserEntity;
+import com.koreait.facebook.user.model.UserProfileEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class UserController {
     @PostMapping("/profileImg")
     public String profileImg(MultipartFile[] imgArr) {
         service.profileImg(imgArr);
+
         return "redirect:profile";
     }
 }

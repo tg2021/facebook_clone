@@ -17,6 +17,7 @@ public class IAuthenticationFacadeImpl implements IAuthenticationFacade{
 
     @Override
     public int getLoginUserPk() {
+
         return getLoginUser().getIuser();
     }
 

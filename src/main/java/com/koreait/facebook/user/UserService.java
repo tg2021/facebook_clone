@@ -5,6 +5,7 @@ import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.common.MySecurityUtils;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
+import com.koreait.facebook.user.model.UserProfileEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class UserService {
     @Autowired
     private UserMapper mapper;
 
+    @Autowired
+    private UserProfileMapper profileMapper;
+
     public int join(UserEntity param) {
         String authCd = secUtils.getRandomDigit(5);
 
@@ -54,12 +58,36 @@ public class UserService {
     }
 
     public void profileImg(MultipartFile[] imgArr) {
-        int iuser = auth.getLoginUserPk();
+        UserEntity loginUser = auth.getLoginUser();
+        int iuser = loginUser.getIuser();
+
         System.out.println("iuser : " + iuser);
         String target = "profile/" + iuser;
 
-        for(MultipartFile img : imgArr) {
+
+
+        UserProfileEntity param = new UserProfileEntity();
+        param.setIuser(iuser);
+
+        for (MultipartFile img : imgArr) {
             String saveFileNm = myFileUtils.transferTo(img, target);
+
+            // saveFileNm이 null이 아니라면 t_user_profile 테이블에
+            // insert하기
+            if (saveFileNm != null) {
+                param.setImg(saveFileNm);
+                int result = profileMapper.insUserProfile(param);
+
+                if(result == 1 && loginUser.getMainProfile() == null) {
+                    UserEntity param2 = new UserEntity();
+                    param2.setIuser(loginUser.getIuser());
+                    param2.setMainProfile(saveFileNm);
+
+                    if(mapper.updUser(param2) == 1) {
+                        loginUser.setMainProfile(saveFileNm);
+                    }
+                }
+            }
         }
     }
 }

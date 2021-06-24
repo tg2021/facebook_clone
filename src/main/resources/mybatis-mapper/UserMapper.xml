@@ -4,9 +4,9 @@
 
     <insert id="join">
         INSERT INTO t_user
-        ( email, pw, nm, tel, authCd )
+        ( email, pw, nm, tel, mainprofile, authCd )
         VALUES
-        ( #{email}, #{pw}, #{nm}, #{tel}, #{authCd} )
+        ( #{email}, #{pw}, #{nm}, #{tel}, #{mainprofile}, #{authCd} )
     </insert>
 
     <select id="selUser" resultType="UserEntity">
@@ -19,6 +19,25 @@
         UPDATE t_user
         SET authCd = null
         WHERE email = #{email} AND authCd = #{authCd}
+    </update>
+
+    <update id="updUser">
+        UPDATE t_user
+        <set>
+            <if test="mainProfile != null and mainProfile != '' ">
+                mainProfile = #{mainProfile}
+            </if>
+            <if test="pw != null and pw != '' ">
+                pw = #{pw}
+            </if>
+            <if test="nm != null and nm != '' ">
+                nm = #{nm}
+            </if>
+            <if test="tel != null and tel != '' ">
+                tel = #{tel}
+            </if>
+        </set>
+        WHERE iuser = #{iuser}
     </update>
 
 </mapper>

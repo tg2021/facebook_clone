@@ -10,4 +10,9 @@
         ( #{img}, #{iuser} )
     </insert>
 
+    <select id="selUserProfileList" resultType="UserProfileEntity">
+        SELECT iprofile, img
+        FROM t_user_profile
+        WHERE iuser = #{iuser}
+    </select>
 </mapper>

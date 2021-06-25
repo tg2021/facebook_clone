@@ -2,7 +2,6 @@
 html, body { margin: 0; padding: 0; }
 a { text-decoration: none; color: black; }
 ul, ol, li { list-style: none; }
-
 header {
     padding-left: 20px;
     padding-right: 20px;
@@ -15,30 +14,24 @@ header {
     width: 100%;
     box-shadow: 0 4px 4px -4px #dfe6e9;
 }
-
 nav {
     display: flex;
     height: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
 .header__left {
     flex: 1 0 140px;
     display: flex;
     align-items: center;
 }
-
-
 .header__center {
     flex: 0 1 auto;
 }
-
 .header__right {
     flex: 1 0 140px;
     height: 100%;
 }
-
 .header__right .menus {
     margin: 0;
     padding: 0;
@@ -47,12 +40,21 @@ nav {
     height: 100%;
     align-items: center;
 }
-
 .header__right .menus li {
     flex-grow: 1;
 }
-
 #container {
     margin-top: 80px;
     padding: 30px;
 }
+.pointer { cursor: pointer; }
+.hide { display: none; }
+.modal { z-index: 100; position: fixed; top: 0; left: 0;  height: 100%; width: 100%; background-color: #000000DD; }
+.modal_close_parent { display: flex; justify-content: flex-end; padding: 40px 60px; }
+.modal_close { color: white; font-size: 50px; cursor: pointer; }
+
+.profile { border-radius: 50%; }
+.w50 { width: 50px; }
+.w200 { width: 200px; }
+.w300 { width: 300px; }
+

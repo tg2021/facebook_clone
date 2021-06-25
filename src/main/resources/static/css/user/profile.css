@@ -1,0 +1,8 @@
+#flexContainer {
+    align-items: center; display: flex; height: 400px;
+    justify-content: center; width: 100%;
+}
+
+.swiper-container { width: 90vw; height: 40vw; }
+.swiper-slide {display: flex; justify-content: center;}
+.no-main-profile { font-size: 30px; }

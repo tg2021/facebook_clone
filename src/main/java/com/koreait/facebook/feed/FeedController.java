@@ -10,4 +10,7 @@ public class FeedController {
 
     @GetMapping("/home")
     public void home() {}
+
+    @GetMapping("/reg")
+    public void reg() {}
 }

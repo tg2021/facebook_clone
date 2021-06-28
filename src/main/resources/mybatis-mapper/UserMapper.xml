@@ -45,8 +45,12 @@
         UPDATE t_user A
         INNER JOIN t_user_profile B
         ON A.iuser = B.iuser
-        AND B.iprofile = ${iprofile}
+        AND B.iprofile = #{iprofile}
         SET A.mainProfile = B.img
         WHERE A.iuser = #{iuser}
+
+        <selectKey order="AFTER" resultType="String" keyColumn="mainProfile" keyProperty="img">
+            SELECT mainProfile FROM t_user WHERE iuser = #{iuser}
+        </selectKey>
     </update>
 </mapper>

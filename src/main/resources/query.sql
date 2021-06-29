@@ -35,3 +35,13 @@ CREATE TABLE t_feed_img(
     img      VARCHAR(50) NOT NULL,
     FOREIGN KEY (ifeed) REFERENCES t_feed (ifeed)
 );
+
+SELECT A.ifeed, A.location, A.ctnt,A.iuser, A.regdt,
+       B.ifeedimg, B.img,
+       C.nm AS writer, C.mainProfile
+FROM t_feed A
+LEFT JOIN t_feed_img B
+ON A.ifeed = B.ifeed
+INNER JOIN t_user C
+ON A.iuser = C.iuser
+ORDER BY A.ifeed DESC;

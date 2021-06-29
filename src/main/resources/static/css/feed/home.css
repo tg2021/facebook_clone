@@ -1,0 +1,5 @@
+section { display: flex; justify-content: center; }
+section #feedContainer { width: 620px; }
+#feedContainer .item { padding: 10px; border-radius: 3px; border: 1px solid #bdc3c7; margin-bottom: 50px; }
+#feedContainer .item .top { display: flex; }
+#feedContainer .itemProfileCont img { width: 32px; border-radius: 50%; }

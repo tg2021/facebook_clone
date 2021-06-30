@@ -1,5 +1,4 @@
 const feedContainerElem = document.querySelector('#feedContainer');
-
 //피드 리스트 가져오기
 function getFeedList() {
     fetch('list')
@@ -9,18 +8,17 @@ function getFeedList() {
             makeFeedList(myJson);
         });
 }
-
 function makeFeedList(data) {
     if(data.length == 0) { return; }
     let beforeifeed = 0;
-    let imgDiv = null;
-    data.forEach(item => {
-        if(beforeifeed !== item.ifeed) {
-            beforeifeed = item.ifeed;
+    let swiperWrapperDiv = null;
+    for(let i=0; i<data.length; i++) {
+        const item = data[i];
 
+        if(beforeifeed !== item.ifeed) { //새로운 feed 시작이다.
+            beforeifeed = item.ifeed;
             const itemContainer = document.createElement('div');
             itemContainer.classList.add('item');
-
             const topDiv = document.createElement('div');
             topDiv.classList.add('top')
             topDiv.innerHTML = `
@@ -32,19 +30,38 @@ function makeFeedList(data) {
                 <div>${item.location == null ? '' : item.location}</div>
             </div>
             `;
-            imgDiv = document.createElement('div');
+            const imgDiv = document.createElement('div');
+            imgDiv.classList.add('itemImg');
+
+            const swiperContainerDiv = document.createElement('div');
+            swiperContainerDiv.classList.add('swiper-container');
+
+            swiperWrapperDiv = document.createElement('div');
+            swiperWrapperDiv.classList.add('swiper-wrapper');
+            swiperContainerDiv.append(swiperWrapperDiv);
+            imgDiv.append(swiperContainerDiv);
             itemContainer.append(topDiv);
             itemContainer.append(imgDiv);
+            if(item.ctnt != null) {
+                const ctntDiv = document.createElement('div');
+                ctntDiv.innerText = item.ctnt;
+                ctntDiv.classList.add('itemCtnt');
+                itemContainer.append(ctntDiv);
+            }
             feedContainerElem.append(itemContainer);
         }
-
         if(item.img != null) {
+            const swiperSlideDiv = document.createElement('div')
+            swiperSlideDiv.classList.add('swiper-slide');
             const img = document.createElement('img');
             img.src = `/pic/feed/${item.ifeed}/${item.img}`;
-            imgDiv.append(img);
+            swiperSlideDiv.append(img);
+            swiperWrapperDiv.append(swiperSlideDiv);
         }
-
+    }
+    const swiper = new Swiper('.swiper-container', {
+        direction: 'horizontal',
+        loop: false,
     });
 }
-
 getFeedList();

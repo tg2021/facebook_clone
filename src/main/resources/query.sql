@@ -45,3 +45,12 @@ ON A.ifeed = B.ifeed
 INNER JOIN t_user C
 ON A.iuser = C.iuser
 ORDER BY A.ifeed DESC;
+
+CREATE TABLE t_feed_fav (
+  ifeed INT UNSIGNED,
+  iuser INT UNSIGNED,
+  regdt DATETIME DEFAULT NOW(),
+  PRIMARY KEY (ifeed, iuser),
+  FOREIGN KEY(ifeed) REFERENCES t_feed (ifeed),
+  FOREIGN KEY(iuser) REFERENCES t_user (iuser)
+);

@@ -12,4 +12,9 @@ public interface FeedMapper {
     List<FeedDomain> selFeedList();
     List<FeedDomain2> selFeedList2(FeedDTO param);
     List<FeedImgEntity> selFeedImgList(FeedDomain2 param);
+
+
+    // fav
+    int insFeedFav(FeedFavEntity pram);
+    int delFeedFav(FeedFavEntity pram);
 }

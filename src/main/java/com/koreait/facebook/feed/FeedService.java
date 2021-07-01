@@ -11,21 +11,13 @@ import java.util.List;
 
 @Service
 public class FeedService {
-
-    @Autowired
-    private FeedMapper mapper;
-
-    @Autowired
-    private IAuthenticationFacade auth;
-
-    @Autowired
-    private MyFileUtils myFileUtils;
-
+    @Autowired private FeedMapper mapper;
+    @Autowired private IAuthenticationFacade auth;
+    @Autowired private MyFileUtils myFileUtils;
     public int reg(MultipartFile[] imgArr, FeedEntity param) {
         if(imgArr == null && param.getCtnt() == null) { return 0; }
         param.setIuser(auth.getLoginUserPk());
-
-        // t_feed
+        //t_feed
         int result = mapper.insFeed(param);
         if(param.getIfeed() > 0 && imgArr != null && imgArr.length > 0) { //등록이 잘 되었음
             FeedImgEntity param2 = new FeedImgEntity();
@@ -42,7 +34,18 @@ public class FeedService {
         }
         return result;
     }
-
     public List<FeedDomain> selFeedList() { return mapper.selFeedList(); }
-    public List<FeedDomain2> selFeedList2(FeedDTO param) { return mapper.selFeedList2(param); }
+
+    public List<FeedDomain2> selFeedList2(FeedDTO param) {
+        param.setIuserForFav(auth.getLoginUserPk());
+        return mapper.selFeedList2(param);
+    }
+
+    public int feedFavProc(FeedFavEntity param, int type) {
+        param.setIuser(auth.getLoginUserPk());
+        if(type == 1) {
+            return mapper.insFeedFav(param);
+        }
+        return mapper.delFeedFav(param);
+    }
 }

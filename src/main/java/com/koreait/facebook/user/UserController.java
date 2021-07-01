@@ -72,6 +72,7 @@ public class UserController {
     public List<FeedDomain2> selFeedList2(FeedDTO param) {
         return service.selFeedList2(param);
     }
+
 }
 
 

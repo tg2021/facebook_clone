@@ -54,3 +54,15 @@ CREATE TABLE t_feed_fav (
   FOREIGN KEY(ifeed) REFERENCES t_feed (ifeed),
   FOREIGN KEY(iuser) REFERENCES t_user (iuser)
 );
+
+-- 댓글
+CREATE TABLE t_feed_cmt(
+    icmt INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    ifeed INT UNSIGNED NOT NULL,
+    iuser INT UNSIGNED NOT NULL,
+    cmt VARCHAR(200) NOT NULL,
+    regdt DATETIME DEFAULT NOW(),
+    FOREIGN KEY (ifeed) REFERENCES t_feed (ifeed),
+    FOREIGN KEY (iuser) REFERENCES t_user(iuser)
+
+);

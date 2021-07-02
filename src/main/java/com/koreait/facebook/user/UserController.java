@@ -29,7 +29,9 @@ public class UserController {
     private MyConst myConst;
 
     @GetMapping("/login")
-    public void login(UserEntity userEntity) {}
+    public void login(UserEntity userEntity) {
+        userEntity.setEmail("ktg0021@naver.com");
+    }
 
     @GetMapping("/join")
     public void join(UserEntity userEntity) {}
@@ -42,7 +44,6 @@ public class UserController {
 
     @GetMapping("/auth")
     public String auth(UserEntity param) {
-        System.out.println("dddddd");
         int result = service.auth(param);
         return "redirect:login?auth=" + result;
     }

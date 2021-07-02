@@ -8,7 +8,5 @@ import java.util.List;
 public class FeedDomain extends FeedEntity{
     private String writer;
     private String mainProfile;
-    private int ifeedimg;
-    private String img;
 
 }

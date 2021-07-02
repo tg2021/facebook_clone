@@ -5,10 +5,7 @@ import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.feed.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -37,6 +34,7 @@ public class FeedController {
     public List<FeedDomain> selFeedList() {
         return service.selFeedList();
     }
+
     @ResponseBody
     @GetMapping("/list2")
     public List<FeedDomain2> selFeedList2(FeedDTO param) {
@@ -50,4 +48,17 @@ public class FeedController {
         System.out.println("type: " + type);
         return service.feedFavProc(param, type);
     }
+
+    @ResponseBody
+    @PostMapping("/cmt")
+    public int insfeedCmt(@RequestBody FeedCmtEntity param) {
+        return service.insFeedCmt(param);
+    }
+
+    @ResponseBody
+    @GetMapping("/cmt")
+    public List<FeedCmtDomain> cmtList(FeedCmtEntity param) {
+        return service.selFeedCmtList(param);
+    }
+
 }

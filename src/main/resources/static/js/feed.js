@@ -118,6 +118,99 @@ const feedObj = {
                     ctntDiv.classList.add('itemCtnt');
                     itemContainer.append(ctntDiv);
                 }
+
+                // 댓글 영역
+                const cmtDiv = document.createElement('div');
+                const cmtListDiv = document.createElement('div');
+                const cmtFormDiv = document.createElement('div');
+                cmtDiv.append(cmtListDiv);
+                if(item.cmt != null && item.cmt.isMore === 1) {
+                    const moreCmtDiv = document.createElement('div');
+                    const moreCmtSpan = document.createElement('span');
+                    moreCmtSpan.className = 'pointer';
+                    moreCmtSpan.innerText = '댓글 더보기';
+                    moreCmtSpan.addEventListener('click', () => {
+                        moreCmtSpan.remove();
+                        fetch(`cmt?ifeed=${item.ifeed}`)
+                            .then(res => res.json())
+                            .then(result => {
+                                result.forEach(obj => {
+                                    const cmtItemContainerDiv = this.makeCmtItem(obj);
+                                    cmtListDiv.append(cmtItemContainerDiv);
+                                })
+                            });
+                    });
+                    moreCmtDiv.append(moreCmtSpan);
+                    cmtDiv.append(moreCmtDiv);
+                }
+                cmtDiv.append(cmtFormDiv);
+
+                // input type text로 생성
+                const cmtInput = document.createElement('input');
+                cmtInput.type = 'text';
+                cmtInput.placeholder = '댓글을 입력하세요...';
+
+                if(item.cmt != null) { //댓글 있음
+                    const cmtItemContainerDiv = this.makeCmtItem(item.cmt);
+                    cmtListDiv.append(cmtItemContainerDiv);
+                }
+
+                // input type button으로 생성
+                const cmtBtn = document.createElement('input');
+                cmtBtn.type = 'button';
+                cmtBtn.value = '등록';
+                cmtBtn.addEventListener('click', () => {
+                    const cmt = cmtInput.value;
+                    if(cmt.length === 0) {
+                        alert('댓글 내용을 작성해 주세요.')
+                        return;
+                    }
+
+                    const param = {
+                        ifeed: item.ifeed,
+                        cmt: cmt
+                    }
+
+                    /*
+                        axios
+                        axios.post('cmt', {
+                            ifeed: item.ifeed,
+                            cmt: cmt
+                        }).then(res => {
+
+                        });
+                     */
+
+                    fetch('cmt', {
+                        method: 'POST',
+                        headers: {
+                            'Accept' : 'application/json',
+                            'Content-Type' : 'application/json'
+                        },
+                        body: JSON.stringify(param)
+                    })
+                        .then(res => res.json())
+
+                        .then(myJson => {
+                            console.log(myJson);
+                            switch (myJson) {
+                                case 0:
+                                    alert('댓글을 등록할 수 없습니다.')
+                                    break;
+                                case 1:
+                                    cmtInput.value = '';
+                                    break;
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                });
+
+                CmtFormDiv.append(cmtInput);
+                CmtFormDiv.append(cmtBtn);
+
+                itemContainer.append(cmtDiv);
                 this.containerElem.append(itemContainer);
             }
             if(this.swiper != null) { this.swiper = null; }
@@ -141,6 +234,7 @@ const feedObj = {
         },
         getFeedList: function(page) {
             this.showLoading();
+
             fetch(`${this.url}?page=${page}&limit=${this.limit}`)
                 .then(res => res.json())
                 .then(myJson => {
@@ -153,6 +247,30 @@ const feedObj = {
                 this.hideLoading();
             });
         },
+
+        makeCmtItem: function({iuser, writerProfile, writer, cmt}) {
+            const cmtItemContainerDiv = document.createElement('div');
+            cmtItemContainerDiv.className = 'cmtItemCont';
+
+            //프로필
+            const cmtItemProfileDiv = document.createElement('div');
+            cmtItemProfileDiv.className = 'cmtItemProfile';
+            const cmtItemWriterProfileImg = document.createElement('img');
+            cmtItemWriterProfileImg.src = `/pic/profile/${iuser}/${writerProfile}`;
+            cmtItemWriterProfileImg.className = 'profile w30';
+
+            cmtItemProfileDiv.append(cmtItemWriterProfileImg);
+            cmtItemContainerDiv.append(cmtItemProfileDiv);
+
+            //댓글
+            const cmtItemCtntDiv = document.createElement('div');
+            cmtItemCtntDiv.className = 'cmtItemCtnt';
+            cmtItemCtntDiv.innerHTML = `<div>${writer}</div><div>${cmt}</div>`;
+            cmtItemContainerDiv.append(cmtItemCtntDiv);
+
+            return cmtItemContainerDiv;
+        },
+
         hideLoading: function() { this.loadingElem.classList.add('hide');},
         showLoading: function() { this.loadingElem.classList.remove('hide'); }
     }

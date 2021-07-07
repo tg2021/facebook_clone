@@ -18,7 +18,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("asddsa123472@gmail.com");
+        message.setFrom("c01030249887@gmail.com");
         message.setTo(to); //받는 사람 이메일 주소
         message.setSubject(subject); //제목
         message.setText(text); //내용
@@ -30,14 +30,15 @@ public class EmailServiceImpl implements EmailService {
         try {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
-            helper.setFrom("asddsa123472@gmail.com");
+            helper.setFrom("c01030249887@gmail.com");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text, true);
-
             emailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
+
+
 }

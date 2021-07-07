@@ -4,15 +4,15 @@
 
     <resultMap id="FeedDomainMap" type="FeedDomain2">
         <result property="ifeed" column="ifeed"></result>
+        <association property="cmt" column="ifeed" select="selFeedCmt"></association>
         <collection property="imgList" column="ifeed" select="selFeedImgList"></collection>
-        <collection property="cmt" column="ifeed" select="selFeedCmtList"></collection>
     </resultMap>
 
     <insert id="insFeed" useGeneratedKeys="true" keyProperty="ifeed">
         INSERT INTO t_feed
-        ( location, ctnt, iuser)
+        ( location, ctnt, iuser )
         VALUES
-        ( #{location}, #{ctnt}, #{iuser})
+        ( #{location}, #{ctnt}, ${iuser} )
     </insert>
 
     <insert id="insFeedImg">
@@ -25,21 +25,21 @@
     <select id="selFeedList" resultType="FeedDomain">
         SELECT
             A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
-             , B.ifeedimg, B.img
-             , C.nm AS writer, C.mainProfile
+            , B.ifeedimg, B.img
+            , C.nm AS writer, C.mainProfile
         FROM t_feed A
-            LEFT JOIN t_feed_img B
-            ON A.ifeed = B.ifeed
-            INNER JOIN t_user C
-            ON A.iuser = C.iuser
+        LEFT JOIN t_feed_img B
+        ON A.ifeed = B.ifeed
+        INNER JOIN t_user C
+        ON A.iuser = C.iuser
         ORDER BY A.ifeed DESC
     </select>
 
     <select id="selFeedList2" resultMap="FeedDomainMap">
         SELECT
-        A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
-        , C.nm AS writer, C.mainProfile
-        , IFNULL(E.cnt, 0) AS favCnt
+            A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
+            , C.nm AS writer, C.mainProfile
+            , IFNULL(E.cnt, 0) AS favCnt
         <if test="iuserForFav > 0">
             , CASE WHEN D.ifeed IS NULL THEN 0 ELSE 1 END AS isFav
         </if>
@@ -50,9 +50,9 @@
             AND C.iuser = ${iuserForMyFeed}
         </if>
         LEFT JOIN (
-        SELECT ifeed, COUNT(ifeed) AS cnt
-        FROM t_feed_fav
-        GROUP BY ifeed
+            SELECT ifeed, COUNT(ifeed) AS cnt
+            FROM t_feed_fav
+            GROUP BY ifeed
         ) E
         ON A.ifeed = E.ifeed
         <if test="iuserForFav > 0">
@@ -69,54 +69,55 @@
         WHERE ifeed = #{ifeed}
     </select>
 
-
-    <!-- fav -->
+    <!-- //////////////////////////// fav ///////////////////////-->
     <insert id="insFeedFav">
         INSERT INTO t_feed_fav
-            ( ifeed, iuser )
+        ( ifeed, iuser )
         VALUES
-            ( #{ifeed}, #{iuser} )
+        ( #{ifeed}, #{iuser} )
     </insert>
 
     <delete id="delFeedFav">
         DELETE FROM t_feed_fav
         WHERE ifeed = #{ifeed}
-          AND iuser = #{iuser}
+        AND iuser = #{iuser}
     </delete>
 
-    <!-- cmt -->
+    <!-- //////////////////////////// cmt ///////////////////////-->
     <select id="selFeedCmt" resultType="FeedCmtDomain">
         SELECT A.*, COUNT(A.icmt) - 1 AS isMore
         FROM (
-        SELECT
-        A.icmt, A.cmt, A.regdt, A.ifeed
-        , B.iuser, B.nm as writer, B.mainProfile as writerProfile
-        FROM t_feed_cmt A
-        INNER JOIN t_user B
-        ON A.iuser = B.iuser
-        WHERE A.ifeed = ${ifeed}
-        ORDER BY icmt ASC
-        LIMIT 2
-             ) A
+            SELECT
+                A.icmt, A.cmt, A.regdt, A.ifeed
+                , B.iuser, B.nm as writer, B.mainProfile as writerProfile
+            FROM t_feed_cmt A
+            INNER JOIN t_user B
+            ON A.iuser = B.iuser
+            WHERE A.ifeed = ${ifeed}
+            ORDER BY icmt ASC
+            LIMIT 2
+        ) A
         GROUP BY A.ifeed
     </select>
 
     <select id="selFeedCmtList" resultType="FeedCmtDomain">
         SELECT
-        A.icmt, A.cmt, A.regdt
-        , B.iuser, B.nm as writer, B.mainProfile as writerProfile
+            A.icmt, A.cmt, A.regdt
+            , B.iuser, B.nm as writer, B.mainProfile as writerProfile
         FROM t_feed_cmt A
         INNER JOIN t_user B
         ON A.iuser = B.iuser
         WHERE A.ifeed = ${ifeed}
         ORDER BY icmt ASC
-            LIMIT 1, 900000
+        LIMIT 1, 900000
     </select>
 
     <insert id="insFeedCmt">
         INSERT INTO t_feed_cmt
-            ( ifeed, iuser, cmt )
+        ( ifeed, iuser, cmt )
         VALUES
-            ( ${ifeed}, ${iuser}, #{cmt} )
+        ( ${ifeed}, ${iuser}, #{cmt} )
     </insert>
+
+
 </mapper>

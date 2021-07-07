@@ -8,6 +8,7 @@ import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.IAuthenticationFacade;
 import com.koreait.facebook.user.model.UserEntity;
+import com.koreait.facebook.user.model.UserDomain;
 import com.koreait.facebook.user.model.UserProfileEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,28 +55,21 @@ public class UserService {
 
     public void profileImg(MultipartFile[] imgArr) {
         UserEntity loginUser = auth.getLoginUser();
-        int iuser = loginUser.getIuser();
+        int iuser = loginUser.getIuser(); //11
 
         System.out.println("iuser : " + iuser);
         String target = "profile/" + iuser;
 
-
-
         UserProfileEntity param = new UserProfileEntity();
-        param.setIuser(iuser);
+        param.setIuser(iuser); //11
 
-        for (MultipartFile img : imgArr) {
-            String saveFileNm = myFileUtils.transferTo(img, target);
-
-            // saveFileNm이 null이 아니라면 t_user_profile 테이블에
-            // insert하기
-            if (saveFileNm != null) {
+        for(MultipartFile img : imgArr) {
+            String saveFileNm = myFileUtils.transferTo(img, target); //"weioj435lknsio.jpg"
+            if(saveFileNm != null) {
                 param.setImg(saveFileNm);
-                int result = profileMapper.insUserProfile(param);
-
-                if(result == 1 && loginUser.getMainProfile() == null) {
+                if(profileMapper.insUserProfile(param) == 1 && loginUser.getMainProfile() == null) {
                     UserEntity param2 = new UserEntity();
-                    param2.setIuser(loginUser.getIuser());
+                    param2.setIuser(iuser); //11
                     param2.setMainProfile(saveFileNm);
 
                     if(mapper.updUser(param2) == 1) {
@@ -86,11 +80,15 @@ public class UserService {
         }
     }
 
+    public UserDomain selUserProfile(UserEntity param) {
+        return profileMapper.selUserProfile(param);
+    }
+
     public List<UserProfileEntity> selUserProfileList(UserEntity param) {
         return profileMapper.selUserProfileList(param);
     }
 
-    // 메인 이미지 변경
+    //메인 이미지 변경
     public Map<String, Object> updUserMainProfile(UserProfileEntity param) {
         UserEntity loginUser = auth.getLoginUser();
 
@@ -107,7 +105,6 @@ public class UserService {
     }
 
     public List<FeedDomain2> selFeedList2(FeedDTO param) {
-        param.setIuserForMyFeed(auth.getLoginUserPk());
         return feedMapper.selFeedList2(param);
     }
 }

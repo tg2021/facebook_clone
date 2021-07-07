@@ -27,14 +27,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        // ignoring 설정
-        web.ignoring().antMatchers("/pic/**", "/css/**", "/js/**", "/img/**", "/error", "favicon.ico", "/resources/**");
+        web.ignoring().antMatchers("/pic/**", "/css/**", "/js/**", "/img/**", "/error", "favicon.ico");
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*
+        http.csrf().disable();
+
+        http.authorizeRequests()
+                .antMatchers("/user/login", "/user/join", "/user/auth").permitAll()
+                .anyRequest().authenticated();
+
+        http.formLogin()
+                .loginPage("/user/login")
+                .usernameParameter("email")
+                .passwordParameter("pw")
+                .defaultSuccessUrl("/feed/home");
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutSuccessUrl("/user/login")
+                .invalidateHttpSession(true);
+
+    /*
             CSRF(Cross Site Request Forgery) 공격 : 웹 어플리케이션 취약점 중 하나로 인터넷 사용자가
             자신의 의지와는 무관하게 공격자가 의도한 행위(수정, 삭제, 등록 등)를 특정 웹사이트에 요청하게 만든는 공격이다.
 
@@ -59,26 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             - requestMatchers :  RequestMatcher 인터페이스 구현과 일치하는 resource에 적용
             - anyRequest : 기타 resource에 적용
          */
-        http.csrf().disable();
-
-        http.authorizeRequests()
-                .antMatchers("/user/login", "/user/join", "/user/auth").permitAll()
-                .anyRequest().authenticated();
-
-        http.formLogin()
-                .loginPage("/user/login")
-                .usernameParameter("email")
-                .passwordParameter("pw")
-                .defaultSuccessUrl("/feed/home");
-
-        http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/user/login")
-                .invalidateHttpSession(true);
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception { // 비밀번호 암호화해서 비교
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
     }
 }

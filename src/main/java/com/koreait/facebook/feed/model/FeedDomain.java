@@ -1,12 +1,15 @@
 package com.koreait.facebook.feed.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.List;
-
-@Data
-public class FeedDomain extends FeedEntity{
+@Getter
+@Setter
+@ToString
+public class FeedDomain extends FeedEntity {
     private String writer;
     private String mainProfile;
-
+    private int ifeedimg;
+    private String img;
 }

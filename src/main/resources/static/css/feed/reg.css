@@ -1,3 +1,2 @@
-#selectedImgList { display: flex; flex-wrap: wrap; }
-
-#selectedImgList img { width: 200px; }
+#displayImgList { display: flex; flex-wrap: wrap; }
+#displayImgList img { width: 200px; }

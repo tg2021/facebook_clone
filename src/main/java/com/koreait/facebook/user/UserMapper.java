@@ -10,6 +10,5 @@ public interface UserMapper {
     UserEntity selUser(UserEntity param);
     int auth(UserEntity param);
     int updUser(UserEntity param);
-
     int updUserMainProfile(UserProfileEntity param);
 }

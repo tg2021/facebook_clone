@@ -36,7 +36,6 @@ public class MyFileUtils {
         return getRandomFileNm() + "." + getExt(originFileNm);
         //return "aslkdfjaslkf2130asdwds" + "." + "jpg"
         //return "aslkdfjaslkf2130asdwds.jpg"
-
     }
 
     //랜덤 파일명 만들기

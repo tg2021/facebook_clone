@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:data="http://www.w3.org/1999/xhtml">
 
   <header th:fragment="header">
+    <span id="globalConst" sec:authorize="isAuthenticated()" th:with="auth=${#authentication.getPrincipal().getUser()}"
+          th:attr="data-iuser=${auth.iuser}, data-writer=${auth.nm}, data-writer-profile=${auth.mainProfile}"></span>
     <nav>
       <div class="header__left">
         <a th:href="@{/feed/home}">
@@ -24,14 +26,14 @@
           <li><a th:href="@{/user/login}">로그인</a></li>
         </ul>
 
-        <ul class="menus" sec:authorize="isAuthenticated()">
+        <ul class="menus" sec:authorize="isAuthenticated()" th:with="auth=${#authentication.getPrincipal().getUser()}">
           <li>
-            <a th:href="@{/user/profile}" >
-              <span class="span__profile" th:with="auth=${#authentication.getPrincipal().getUser()}">
-                  <img class="profile w50" th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
-                <span th:text="${auth.nm}"></span>
-              </span>
-            </a>
+              <a th:href="@{/user/profile}">
+                <span class="span__profile">
+                   <img class="profile w50" th:if="${auth.mainProfile != null}" th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
+                  <span th:text="${auth.nm}"></span>
+                </span>
+              </a>
           </li>
           <li><a th:href="@{/feed/reg}"><i class="fas fa-plus"></i></a></li>
           <li><a th:href="@{/user/logout}">로그아웃</a></li>

@@ -1,7 +1,6 @@
 package com.koreait.facebook.feed;
 
 import com.koreait.facebook.common.MyConst;
-import com.koreait.facebook.common.MyFileUtils;
 import com.koreait.facebook.feed.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,16 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
 @RequestMapping("/feed")
 public class FeedController {
+
     @Autowired private FeedService service;
     @Autowired private MyConst myConst;
+
     @GetMapping("/home")
     public void home() {}
+
     @GetMapping("/reg")
     public void reg(FeedEntity obj) {}
+
     @ResponseBody
     @PostMapping("/reg")
     public Map<String, Integer> reg(MultipartFile[] imgArr, FeedEntity param) {
@@ -29,6 +31,7 @@ public class FeedController {
         res.put(myConst.RESULT, service.reg(imgArr, param));
         return res;
     }
+
     @ResponseBody
     @GetMapping("/list")
     public List<FeedDomain> selFeedList() {
@@ -51,7 +54,7 @@ public class FeedController {
 
     @ResponseBody
     @PostMapping("/cmt")
-    public int insfeedCmt(@RequestBody FeedCmtEntity param) {
+    public int insFeedCmt(@RequestBody FeedCmtEntity param) {
         return service.insFeedCmt(param);
     }
 
@@ -60,5 +63,4 @@ public class FeedController {
     public List<FeedCmtDomain> cmtList(FeedCmtEntity param) {
         return service.selFeedCmtList(param);
     }
-
 }

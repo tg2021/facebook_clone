@@ -7,4 +7,5 @@ section { display: flex; flex-direction: column; align-items: center; }
 
 .modal .swiper-container { height: 40vw; width: 90vw; }
 .modal .swiper-slide { display: flex; justify-content: center; }
+
 .modal .no-main-profile { font-size: 30px; }

@@ -4,9 +4,9 @@
 
     <insert id="join">
         INSERT INTO t_user
-        ( email, pw, nm, tel, mainprofile, authCd )
+        ( email, pw, nm, tel, authCd )
         VALUES
-        ( #{email}, #{pw}, #{nm}, #{tel}, #{mainprofile}, #{authCd} )
+        ( #{email}, #{pw}, #{nm}, #{tel}, #{authCd} )
     </insert>
 
     <select id="selUser" resultType="UserEntity">
@@ -40,7 +40,6 @@
         WHERE iuser = #{iuser}
     </update>
 
-    <!-- 프로파일 변경 -->
     <update id="updUserMainProfile">
         UPDATE t_user A
         INNER JOIN t_user_profile B
@@ -53,4 +52,6 @@
             SELECT mainProfile FROM t_user WHERE iuser = #{iuser}
         </selectKey>
     </update>
+
+
 </mapper>

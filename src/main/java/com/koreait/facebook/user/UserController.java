@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +24,8 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService service;
-
-    @Autowired
-    private MyConst myConst;
+    @Autowired private UserService service;
+    @Autowired private MyConst myConst;
 
     @GetMapping("/login")
     public void login(UserEntity userEntity) {
@@ -49,22 +48,24 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public void profile(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        UserEntity loginUser = userDetails.getUser();
-        model.addAttribute(myConst.PROFILE_LIST, service.selUserProfileList(loginUser));
+    public void profile(Model model, UserEntity param, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println(param);
+        if(param.getIuser() == 0) {
+            param.setIuser(userDetails.getUser().getIuser());
+        }
+        model.addAttribute(myConst.PROFILE, service.selUserProfile(param));
+        model.addAttribute(myConst.PROFILE_LIST, service.selUserProfileList(param));
     }
 
     @PostMapping("/profileImg")
     public String profileImg(MultipartFile[] imgArr) {
         service.profileImg(imgArr);
-
         return "redirect:profile";
     }
 
     @ResponseBody
     @GetMapping("/mainProfile")
     public Map<String, Object> mainProfile(UserProfileEntity param) {
-
         return service.updUserMainProfile(param);
     }
 
@@ -73,8 +74,9 @@ public class UserController {
     public List<FeedDomain2> selFeedList2(FeedDTO param) {
         return service.selFeedList2(param);
     }
-
 }
+
+
 
 
 

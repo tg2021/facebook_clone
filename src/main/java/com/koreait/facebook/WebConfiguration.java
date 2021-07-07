@@ -15,7 +15,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pic/**")
                 .addResourceLocations("file:///" + uploadImagePath + "/")
-                .setCachePeriod(4000) // 캐시가 4초동안 살아있게끔
+                .setCachePeriod(4000)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }

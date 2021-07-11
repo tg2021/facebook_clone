@@ -30,7 +30,7 @@
           <li>
               <a th:href="@{/user/profile}">
                 <span class="span__profile">
-                   <img class="profile w50" th:if="${auth.mainProfile != null}" th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
+                   <img class="profile wh50" th:if="${auth.mainProfile != null}" th:src="@{/pic/profile/{iuser}/{img}(iuser=${auth.iuser}, img=${auth.mainProfile})}">
                   <span th:text="${auth.nm}"></span>
                 </span>
               </a>

@@ -3,9 +3,9 @@
 <mapper namespace="com.koreait.facebook.user.UserProfileMapper">
     <insert id="insUserProfile">
         INSERT INTO t_user_profile
-        ( iuser, img )
+            ( iuser, img )
         VALUES
-        ( #{iuser}, #{img} )
+            ( #{iuser}, #{img} )
     </insert>
 
     <select id="selUserProfile" resultType="UserDomain">
@@ -23,7 +23,7 @@
     <select id="selUserProfileList" resultType="UserProfileEntity">
         SELECT iprofile, img
         FROM t_user_profile
-        WHERE iuser = #{iuser}
+        WHERE iuser = ${iuser}
     </select>
 
 </mapper>

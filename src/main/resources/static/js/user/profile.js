@@ -1,7 +1,9 @@
+
 const modalElem = document.querySelector('section .modal');
 const modalCloseElem = document.querySelector('section .modal .modal_close');
 const btnFollowElem = document.querySelector('#btnFollow'); //팔로우 버튼
 const profileImgElem = document.querySelector('#profileImg');
+
 
 //모달창 띄우기 이벤트
 profileImgElem.addEventListener('click', () => {
@@ -17,6 +19,7 @@ profileImgParentList.forEach(item => {
         addIElemEvent(iElem);
     }
 });
+
 //메인이미지 바꾸기 아이콘에 이벤트 설정
 function addIElemEvent(target) {
     target.addEventListener('click', () => {
@@ -25,6 +28,7 @@ function addIElemEvent(target) {
         changeMainProfile(iprofile);
     });
 }
+
 //메인 이미지 변경
 function changeMainProfile(iprofile) {
     fetch(`/user/mainProfile?iprofile=${iprofile}`)
@@ -35,11 +39,13 @@ function changeMainProfile(iprofile) {
                     alert('메인 이미지 변경에 실패하였습니다.'); break;
                 case 1:
                     setMainProfileIcon(iprofile);
+
                     //section에 있는 프로필 이미지 변경
                     const src = profileImgElem.src;
                     const frontSrc = src.substring(0, src.lastIndexOf("/"));
                     const resultSrc = `${frontSrc}/${myJson.img}`
                     profileImgElem.src = resultSrc;
+
                     //헤더에 있는 프로필 이미지 변경
                     const headerProfileImgElem = document.querySelector('header .span__profile img');
                     headerProfileImgElem.src = resultSrc;
@@ -60,12 +66,7 @@ function setMainProfileIcon(iprofile) {
         }
     });
 }
-//모달창 띄우기
-if(profileImgElem) {
-    profileImgElem.addEventListener('click', () => {
-        modalElem.classList.remove('hide');
-    });
-}
+
 //모달창 닫기
 if(modalCloseElem) {
     modalCloseElem.addEventListener('click', () => {
@@ -73,6 +74,7 @@ if(modalCloseElem) {
         //location.reload();
     });
 }
+
 if(btnFollowElem) {
     btnFollowElem.addEventListener('click', () => {
         const param = { iuserYou: localConstElem.dataset.iuser };
@@ -89,6 +91,7 @@ if(btnFollowElem) {
                 queryString = `?iuserYou=${param.iuserYou}`;
                 break;
         }
+
         fetch('follow' + queryString, init)
             .then(res => res.json())
             .then(myJson => {
@@ -109,8 +112,88 @@ if(btnFollowElem) {
     });
 }
 
+
 const localConstElem = document.querySelector('#localConst');
+
 feedObj.url = '/user/feedList';
 feedObj.setScrollInfinity(window);
 feedObj.iuser = localConstElem.dataset.iuser;
 feedObj.getFeedList(1);
+
+
+/******************************************************** 팔로우 모달 **/
+const followerElemArr = document.querySelectorAll('.pointer.follower');
+const followElemArr = document.querySelectorAll('.pointer.follow');
+const modalFollowElem = document.querySelector('.modal-follow');
+const modalFollowTitleElem = modalFollowElem.querySelector('#title');
+const modalFollowCloseElem = document.querySelector('.modal-follow #modal-follow-close');
+const modalFollowItemConElem = modalFollowElem.querySelector('.followCont');
+
+if(followerElemArr) {
+    followerElemArr.forEach(item => {
+        item.addEventListener('click', () => {
+            modalFollowTitleElem.innerText = '팔로워';
+            modalFollowElem.classList.remove('hide');
+            modalFollowItemConElem.innerHTML = '';
+``
+        });
+    });
+}
+
+if(followElemArr) {
+    followElemArr.forEach(item => {
+        item.addEventListener('click', () => {
+            modalFollowTitleElem.innerText = '팔로우';
+            modalFollowElem.classList.remove('hide');
+            modalFollowItemConElem.innerHTML = '';
+
+            //프로필 사용자가 팔로우한 사람들 리스트
+            fetch(`getFollowList?iuserYou=${localConstElem.dataset.iuser}`)
+                .then(res => res.json())
+                .then(myJson => {
+                    if(myJson.length > 0) {
+                        myJson.forEach(item => {
+                            const cont = makeFollowItem(item);
+                            modalFollowItemConElem.append(cont);
+                        });
+                    }
+                });
+        });
+    });
+}
+
+if(modalFollowCloseElem) {
+    modalFollowCloseElem.addEventListener('click', () => {
+        modalFollowElem.classList.add('hide');
+    });
+}
+
+function makeFollowItem(item) {
+    const globalContElem = document.querySelector('#globalConst');
+    const loginIuser = globalContElem.dataset.iuser;
+
+    const cont = document.createElement('div');
+    cont.className = 'follow-item';
+    const img = document.createElement('img');
+    img.className = 'profile wh30';
+    img.src = `/pic/profile/${item.iuser}/${item.mainProfile}`;
+    img.onerror = () => { img.style.visibility = 'hidden'; }
+
+    const nm = document.createElement('div');
+    nm.innerText = item.nm;
+    const btn = document.createElement('input');
+    btn.className = 'instaBtn';
+    cont.append(img);
+    cont.append(nm);
+    if(parseInt(loginIuser) !== item.iuser) {
+        btn.type = 'button';
+        if(item.isMeFollowYou) {
+            btn.value = '팔로우 취소';
+        } else {
+            btn.classList.add('instaBtnEnable');
+            btn.value = '팔로우';
+        }
+        cont.append(btn);
+    }
+    return cont;
+}

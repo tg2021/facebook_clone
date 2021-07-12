@@ -60,7 +60,7 @@ function changeMainProfile(iprofile) { //iprofile: 3
             }
         });
 }
-                           //현재 mainProfile로 바뀐 iprofile값 입니다.
+//현재 mainProfile로 바뀐 iprofile값 입니다.
 function setMainProfileIcon(iprofile) {
     profileImgParentList.forEach(item => {
         item.innerHTML = '';

@@ -4,10 +4,7 @@ import com.koreait.facebook.common.MyConst;
 import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
 import com.koreait.facebook.security.UserDetailsImpl;
-import com.koreait.facebook.user.model.UserDTO;
-import com.koreait.facebook.user.model.UserEntity;
-import com.koreait.facebook.user.model.UserFollowEntity;
-import com.koreait.facebook.user.model.UserProfileEntity;
+import com.koreait.facebook.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,7 @@ public class UserController {
 
     @GetMapping("/login")
     public void login(UserEntity userEntity) {
-        userEntity.setEmail("ktg0021@naver.com");
+        userEntity.setEmail("pirbak@daum.net");
     }
 
     @GetMapping("/join")
@@ -50,17 +47,15 @@ public class UserController {
     public void profile(Model model, UserEntity param, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         System.out.println(param);
 
-
         UserDTO param2 = new UserDTO();
         param2.setYouIuser(param.getIuser());
         if(param2.getYouIuser() == 0) {
             param2.setYouIuser(userDetails.getUser().getIuser());
             param.setIuser(userDetails.getUser().getIuser());
         }
-
         model.addAttribute(myConst.PROFILE, service.selUserProfile(param2));
         model.addAttribute(myConst.PROFILE_LIST, service.selUserProfileList(param));
-        }
+    }
 
     @PostMapping("/profileImg")
     public String profileImg(MultipartFile[] imgArr) {
@@ -90,6 +85,12 @@ public class UserController {
     @DeleteMapping("/follow")
     public Map<String, Object> cancelFollow(UserFollowEntity param) {
         return service.delUserFollow(param);
+    }
+
+    @ResponseBody
+    @GetMapping("/getFollowList")
+    public List<UserDomain> getFollowList(UserFollowEntity param) {
+        return service.selUserFollowList(param);
     }
 }
 

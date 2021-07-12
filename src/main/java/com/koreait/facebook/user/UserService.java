@@ -105,16 +105,20 @@ public class UserService {
         return res;
     }
 
-    public List<FeedDomain2> selFeedList2(FeedDTO param) {
-        return feedMapper.selFeedList2(param);
-    }
-
     //팔로우 하기
     public Map<String, Object> insUserFollow(UserFollowEntity param) {
         param.setIuserMe(auth.getLoginUserPk());
         Map<String, Object> res = new HashMap();
         res.put(myConst.RESULT, mapper.insUserFollow(param));
         return res;
+    }
+
+    public List<FeedDomain2> selFeedList2(FeedDTO param) {
+        return feedMapper.selFeedList2(param);
+    }
+    public List<UserDomain> selUserFollowList(UserFollowEntity param) {
+        param.setIuserMe(auth.getLoginUserPk());
+        return mapper.selUserFollowList(param);
     }
 
     //팔로우 취소
@@ -135,3 +139,4 @@ public class UserService {
         return res;
     }
 }
+

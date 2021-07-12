@@ -93,4 +93,4 @@ section #feedContainer { width: 620px; }
 #feedContainer .item .cmtItemCont .cmtItemProfile { width: 40px; }
 #feedContainer .item .cmtItemCont .cmtItemCtnt { background-color: #ecf0f1; border-radius: 5px; flex-grow: 1; margin-left: 5px; padding: 5px; }
 
-.profile { object-fit: cover; border-radius: 50%;}
+.profile { object-fit: cover; border-radius: 50%; }

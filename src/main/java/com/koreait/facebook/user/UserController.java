@@ -3,7 +3,7 @@ package com.koreait.facebook.user;
 import com.koreait.facebook.common.MyConst;
 import com.koreait.facebook.feed.model.FeedDTO;
 import com.koreait.facebook.feed.model.FeedDomain2;
-import com.koreait.facebook.security.UserDetailsImpl;
+import com.koreait.facebook.security.model.CustomUserPrincipal;
 import com.koreait.facebook.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class UserController {
 
     @GetMapping("/login")
     public void login(UserEntity userEntity) {
-        userEntity.setEmail("pirbak@daum.net");
+        userEntity.setEmail("ktg0021@naver.com");
     }
 
     @GetMapping("/join")
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public void profile(Model model, UserEntity param, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void profile(Model model, UserEntity param, @AuthenticationPrincipal CustomUserPrincipal userDetails) {
         System.out.println(param);
 
         UserDTO param2 = new UserDTO();
@@ -91,6 +90,12 @@ public class UserController {
     @GetMapping("/getFollowList")
     public List<UserDomain> getFollowList(UserFollowEntity param) {
         return service.selUserFollowList(param);
+    }
+
+    @ResponseBody
+    @GetMapping("/getFollowerList")
+    public List<UserDomain> getFollowerList(UserFollowEntity param) {
+        return service.selUserFollowerList(param);
     }
 }
 

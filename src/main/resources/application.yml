@@ -35,13 +35,15 @@ spring:
           google:
             client-id: 897062476820-0ldppkcuskompdiu5j6j58non6f9p7cm.apps.googleusercontent.com
             client-secret: Y-RixXJTJ9RxfmDlzTo0P7Yz
-
             scope:
               - profile
               - email
           facebook:
-            client-id: 208022541244642
-            client-secret: a663bcad3a2400fa20b51cfa708d2774
+            client-id: 179138040924807
+            client-secret: 7c21603b6ed075afe66c687a53f86a14
+            scope:
+              - email
+              - public_profile
           kakao:
             authorization-grant-type: authorization_code
             client-id: 408f05189f205c2a3ce900fe55bf3495 # rest API 키
@@ -54,8 +56,8 @@ spring:
             client-name: Kakao
           naver:
             authorization-grant-type: authorization_code
-            client-id: 8rVjpA43vq0yo13vhGrW
-            client-secret: YgPmGF5o21
+            client-id: BzwVSuZOKgYfish7aSfn
+            client-secret: 6bxGaH5pm1
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope: name, profile_image
             client-name: Naver
